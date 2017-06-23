@@ -14,38 +14,12 @@ namespace MyWaifu
 {
     public partial class ImageViewer : Form
     {
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetDesktopWindow();
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(
-        [MarshalAs(UnmanagedType.LPTStr)] string lpClassName,
-        [MarshalAs(UnmanagedType.LPTStr)] string lpWindowName);
-        [DllImport("user32.dll")]
-        public static extern IntPtr SetParent(
-            IntPtr hWndChild,
-            IntPtr hWndNewParent);
-
         Image waifu;
+        WindowState _state = MyWaifu.WindowState.BackgroundPinned;
 
         public ImageViewer()
         {
             InitializeComponent();
-            try
-            {
-                InitializeComponent();
-                //this.TransparencyKey = this.BackColor;
-                IntPtr hwndf = this.Handle;
-                IntPtr hwndParent = FindWindow("Progman", null);
-                SetParent(hwndf, hwndParent);
-
-                this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-                this.DoubleBuffered = true;
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         /// <summary>
@@ -121,7 +95,22 @@ namespace MyWaifu
 
         private void ImageViewer_Load(object sender, EventArgs e)
         {
-            BehindDesktopIcon.FixBehindDesktopIcon(this.Handle);
+            switch(_state)
+            {
+                case MyWaifu.WindowState.Normal:
+                    break;
+                case MyWaifu.WindowState.BackgroundPinned:
+                    IntPtr hwndf = this.Handle;
+                    IntPtr hwndParent = WinApi.FindWindow("Progman", null);
+                    WinApi.SetParent(hwndf, hwndParent);
+                    break;
+                case MyWaifu.WindowState.BehindIcon:
+                    BehindDesktopIcon.FixBehindDesktopIcon(this.Handle);
+                    break;
+            }
+
+            this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            this.DoubleBuffered = true;
         }
     }
 }
