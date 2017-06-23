@@ -1,6 +1,6 @@
 ﻿namespace MyWaifu
 {
-    partial class Form1
+    partial class ImageViewer
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -28,9 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // ImageViewer
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Name = "ImageViewer";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.ImageViewer_Load);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
